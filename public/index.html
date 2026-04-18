@@ -420,7 +420,11 @@
 
 <script>
 // ── Config ──
-const ADMIN_EMAIL = "mohammadzaid7889@gmail.com";
+const ADMIN_EMAILS = [
+  "mohammadzaid7889@gmail.com",
+  "adeelarifknp@gmail.com",
+  "aarfeen2003@gmail.com"
+];
 
 const firebaseConfig = {
   apiKey: "AIzaSyCq-EcP5gLWQlTj4-YMBAGGouD9T0b2Qv0",
@@ -451,7 +455,7 @@ auth.onAuthStateChanged(user => {
   document.getElementById("auth-loading").style.display = "none";
   document.getElementById("user-email").textContent = user.email;
 
-  if (user.email === ADMIN_EMAIL) {
+  if (ADMIN_EMAILS.includes(user.email)) {
     document.getElementById("admin-badge").style.display = "inline-block";
     document.getElementById("admin-panel").style.display = "block";
     setupAdminPanel();
