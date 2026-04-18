@@ -320,6 +320,8 @@ header p  { font-size: 12px; color: #64748b; }
 .login-body {
   align-items: center;
   justify-content: center;
+  background: url('/assets/bus_background.png') no-repeat center center fixed;
+  background-size: cover;
 }
 
 /* ── Animated background blobs ── */
@@ -357,15 +359,12 @@ header p  { font-size: 12px; color: #64748b; }
   50%       { transform: translate(-25px, 20px); }
 }
 
-/* ── Subtle grid pattern ── */
+/* ── Dark overlay for background image ── */
 .login-body::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background-color: rgba(15, 23, 42, 0.75);
   pointer-events: none;
 }
 
