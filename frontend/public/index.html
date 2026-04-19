@@ -23,6 +23,7 @@
     <p>Live GPS Tracking System</p>
   </div>
   <span id="admin-badge">Admin</span>
+  <span id="driver-badge" style="display:none;">Driver</span>
   <div id="user-info">
     <span id="user-email"></span>
     <button id="logout-btn">Sign Out</button>
@@ -70,20 +71,7 @@
   </div>
   <div class="panel-body" id="panel-body">
 
-    <!-- Bus active toggle -->
-    <div>
-      <div class="panel-section-label">Bus Status</div>
-      <div class="bus-status-row">
-        <div>
-          <div class="bus-status-label">Bus Running</div>
-          <div class="bus-status-sub">Visible to all students</div>
-        </div>
-        <label class="toggle-wrap">
-          <input type="checkbox" id="bus-active-toggle"/>
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-    </div>
+
 
     <!-- Manual location override -->
     <div>
@@ -105,6 +93,106 @@
       <div id="panel-feedback"></div>
     </div>
 
+    <!-- Attendance Monitoring for Admin -->
+    <div style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 16px;">
+      <div class="panel-section-label">Attendance Monitoring</div>
+      <div id="admin-attendance-view" style="font-size: 12px; color: #94a3b8; max-height: 150px; overflow-y: auto;">
+        <p>Loading attendance logs...</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Driver Panel -->
+<div id="driver-panel" style="display:none;">
+  <div class="panel-header" id="driver-panel-header">
+    <div class="panel-title">🚌 Driver Panel</div>
+    <span id="driver-panel-toggle">▲</span>
+  </div>
+  <div class="panel-body" id="driver-panel-body">
+    <div>
+      <div class="panel-section-label">Mark Attendance</div>
+      <div style="margin-bottom: 10px;">
+        <label for="stop-select" style="font-size: 11px; color: #94a3b8;">Select Stop:</label>
+        <select id="stop-select" class="driver-select"></select>
+      </div>
+      <button class="panel-btn btn-push" id="reach-stop-btn" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; margin-bottom: 15px;">📍 I have reached this stop</button>
+      
+      <div>
+        <label for="student-select" style="font-size: 11px; color: #94a3b8;">Select Student:</label>
+        <select id="student-select" class="driver-select"></select>
+      </div>
+      <div style="margin-top: 10px;">
+        <label for="status-select" style="font-size: 11px; color: #94a3b8;">Status:</label>
+        <select id="status-select" class="driver-select">
+          <option value="Present">✅ Present / Picked Up</option>
+          <option value="Absent">❌ Absent</option>
+        </select>
+      </div>
+      <br/>
+      <button class="panel-btn btn-push" id="mark-attendance-btn">📤 Update Attendance</button>
+      <div id="driver-feedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Emergency SOS Button & Modal -->
+<button id="sos-btn" class="sos-floating-btn">🚨 SOS</button>
+
+<!-- Route Schedule Button -->
+<button id="route-btn" class="route-floating-btn">🗺️ Route</button>
+
+<!-- Route Sidebar -->
+<div id="route-sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h2>Bus Route & Schedule</h2>
+    <button id="close-route" class="close-btn">&times;</button>
+  </div>
+  <div class="sidebar-body">
+    <ul id="route-list" class="route-list"></ul>
+  </div>
+</div>
+
+<div id="emergency-modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🚨 Emergency Contacts</h2>
+      <button id="close-sos" class="close-btn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>If you are facing any problem or feel unsafe on the bus, contact immediately:</p>
+      <div class="contact-list">
+        <a href="tel:112" class="contact-card urgency-high">
+          <span class="contact-icon">🚓</span>
+          <div class="contact-info">
+            <span class="contact-name">Police / National Emergency</span>
+            <span class="contact-num">112</span>
+          </div>
+        </a>
+        <a href="tel:1091" class="contact-card urgency-high">
+          <span class="contact-icon">🛡️</span>
+          <div class="contact-info">
+            <span class="contact-name">Women Helpline</span>
+            <span class="contact-num">1091</span>
+          </div>
+        </a>
+        <a href="tel:+91XXXXXXXXXX" class="contact-card urgency-medium">
+          <span class="contact-icon">🏢</span>
+          <div class="contact-info">
+            <span class="contact-name">College Administration</span>
+            <span class="contact-num">Tap to Call</span>
+          </div>
+        </a>
+        <a href="tel:+91XXXXXXXXXX" class="contact-card urgency-medium">
+          <span class="contact-icon">🚌</span>
+          <div class="contact-info">
+            <span class="contact-name">Transport Incharge</span>
+            <span class="contact-num">Tap to Call</span>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -113,9 +201,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-<script src="/src/firebase.js"></script>
-<script src="/src/map.js"></script>
-<script src="/src/app.js"></script>
+<script src="/src/firebase.js?v=1.1"></script>
+<script src="/src/map.js?v=1.1"></script>
+<script src="/src/app.js?v=1.1"></script>
 
 <!-- Google Maps -->
 <script

@@ -5,6 +5,10 @@ const ADMIN_EMAILS = [
   "aarfeen2003@gmail.com"
 ];
 
+const DRIVER_EMAILS = [
+  "driver@iul.ac.in"
+];
+
 const firebaseConfig = {
   apiKey: "AIzaSyCq-EcP5gLWQlTj4-YMBAGGouD9T0b2Qv0",
   authDomain: "college-bus-tracker-b6e39.firebaseapp.com",
@@ -26,5 +30,6 @@ if (firebase.database) {
 
 // Make globally available
 window.ADMIN_EMAILS = ADMIN_EMAILS;
+window.DRIVER_EMAILS = DRIVER_EMAILS;
 window.auth = auth;
 window.db = db;

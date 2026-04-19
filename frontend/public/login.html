@@ -16,9 +16,15 @@
 
 <div class="login-card">
   <div class="card-header">
-    <img src="/assets/iul_bus_icon.png" alt="IUL Bus Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 8px 28px rgba(0,0,0,0.45); object-fit: contain; background: rgba(0,0,0,0.3);">
+    <div class="bus-icon">🚌</div>
     <h1>IUL BUS TRACKING</h1>
-    <p>Sign in to access live GPS tracking</p>
+    <p>Login to your account</p>
+  </div>
+
+  <!-- Login Type Toggle -->
+  <div class="login-toggle">
+    <button id="type-user" class="active">Student/Admin</button>
+    <button id="type-driver">Driver</button>
   </div>
 
   <form id="login-form" autocomplete="on" novalidate>
