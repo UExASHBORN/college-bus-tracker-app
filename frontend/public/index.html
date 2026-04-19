@@ -17,7 +17,7 @@
 </div>
 
 <header>
-  <img src="../assets/iul_bus_icon.png"> alt="IUL Bus Logo" style="width: 38px; height: 38px; border-radius: 8px; object-fit: contain; flex-shrink: 0;">
+  <img src="/assets/iul_bus_icon.png" alt="IUL Bus Logo" style="width: 38px; height: 38px; border-radius: 8px; object-fit: contain; flex-shrink: 0;">
   <div class="header-title">
     <h1>IUL BUS TRACKING</h1>
     <p>Live GPS Tracking System</p>
@@ -206,6 +206,7 @@
 <script src="../src/app.js?v=1.1"></script>
 
 <!-- Google Maps -->
+
 <script>
   const GOOGLE_MAPS_API_KEY = "REPLACE_WITH_YOUR_REAL_KEY";
 </script>
@@ -213,7 +214,7 @@
 <script>
   function loadGoogleMaps() {
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${AIzaSyA2UuEzp_1BiKlDfuyFN1tGeDy6BpNVki4}&callback=initMap`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
@@ -221,6 +222,10 @@
 
   window.addEventListener("load", loadGoogleMaps);
 </script>
+<!-- <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2UuEzp_1BiKlDfuyFN1tGeDy6BpNVki4&callback=initMap"
+  async defer>
+</script> -->
 
 </body>
 </html>
