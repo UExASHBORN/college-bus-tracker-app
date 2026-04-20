@@ -1,3 +1,11 @@
+// TEMP BOOTSTRAP (to restore functionality fast)
+
+import "../services/firebase.service.js";
+import "../modules/map.module.js";
+
+// Old app logic (temporary)
+import "../core/init.js";
+
 let currentUser = null;
 
 // ── Auth Gate ──
