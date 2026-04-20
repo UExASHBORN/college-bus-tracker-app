@@ -4,7 +4,7 @@ import "../services/firebase.service.js";
 import "../modules/map.module.js";
 
 // Old app logic (temporary)
-import "../core/init.js";
+import "./init.js";
 
 let currentUser = null;
 
