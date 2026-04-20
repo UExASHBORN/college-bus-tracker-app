@@ -6,6 +6,8 @@ import "../modules/map.module.js";
 // Old app logic (temporary)
 import "./init.js";
 
+let mobileTrackingStarted = false;
+
 let currentUser = null;
 
 // ── Auth Gate ──
@@ -76,7 +78,11 @@ function listenToFirebase() {
   document.getElementById("no-gps").style.display = "block";
   document.getElementById("gps-status").textContent = "Fallback mode (Phone GPS)";
 
-  if (navigator.geolocation) {
+  if (navigator.geolocation && !mobileTrackingStarted) {
+
+  mobileTrackingStarted = true;
+
+  navigator.geolocation.watchPosition(async (pos) => {
 
     navigator.geolocation.watchPosition(async (pos) => {
       const lat = pos.coords.latitude;

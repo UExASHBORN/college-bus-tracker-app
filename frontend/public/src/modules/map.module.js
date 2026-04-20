@@ -22,23 +22,12 @@ window.updateMapLocation = function (lat, lng) {
   map.setView(position, map.getZoom() || 15);
 
   // Continuous tracking for mobile fallback
-if (navigator.geolocation) {
-  navigator.geolocation.watchPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+  window.updateMapLocation = function (lat, lng) {
+  if (!map) return;
 
-    if (window.updateMapLocation) {
-      window.updateMapLocation(lat, lng);
-    }
+  const position = [lat, lng];
 
-    await db.ref("bus/location").set({
-      lat,
-      lng,
-      satellites: "phone",
-      timestamp: Math.floor(Date.now() / 1000),
-      source: "mobile"
-    });
-
-  });
-}
+  marker.setLatLng(position);
+  map.setView(position, map.getZoom() || 15);
+};
 };
