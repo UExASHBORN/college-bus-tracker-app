@@ -12,14 +12,18 @@ auth.onAuthStateChanged(user => {
   }
 
   // If user is logged in and on login page, redirect to index
-  initMap();
   if (isLoginPage) {
     window.location.replace("index.html");
     return;
   }
 
   // --- Index Page Auth Logic ---
+  document.body.style.display = "block";
+  if (!isLoginPage && typeof initMap === "function") {
+    initMap();
+  }
   currentUser = user;
+  listenToFirebase();
   document.getElementById("auth-loading").style.display = "none";
   document.getElementById("user-email").textContent = user.email;
 
@@ -68,12 +72,8 @@ function listenToFirebase() {
 
     document.getElementById("no-gps").style.display = "none";
     const pos = { lat: data.lat, lng: data.lng };
-    if (window.marker) window.marker.setPosition(pos);
-
-    if (window.firstFix && window.map) {
-      window.map.setCenter(pos);
-      window.map.setZoom(17);
-      window.firstFix = false;
+    if (window.updateMapLocation) {
+      window.updateMapLocation(data.lat, data.lng);
     }
 
     document.getElementById("dot").className = "live";

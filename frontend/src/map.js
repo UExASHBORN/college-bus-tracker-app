@@ -2,6 +2,8 @@ let map;
 let marker;
 
 window.initMap = function () {
+  if (map) return; // 🛑 prevent duplicate init
+
   map = L.map('map').setView([26.8467, 80.9462], 13);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
