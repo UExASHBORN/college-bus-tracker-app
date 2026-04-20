@@ -19,5 +19,26 @@ window.updateMapLocation = function (lat, lng) {
   const position = [lat, lng];
 
   marker.setLatLng(position);
-  map.setView(position, 15);
+  map.setView(position, map.getZoom() || 15);
+
+  // Continuous tracking for mobile fallback
+if (navigator.geolocation) {
+  navigator.geolocation.watchPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    if (window.updateMapLocation) {
+      window.updateMapLocation(lat, lng);
+    }
+
+    await db.ref("bus/location").set({
+      lat,
+      lng,
+      satellites: "phone",
+      timestamp: Math.floor(Date.now() / 1000),
+      source: "mobile"
+    });
+
+  });
+}
 };

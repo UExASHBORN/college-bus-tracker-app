@@ -71,12 +71,40 @@ function listenToFirebase() {
     const data = snapshot.val();
 
     if (!data || !data.lat || !data.lng) {
-      document.getElementById("dot").className = "lost";
-      document.getElementById("status-text").textContent = "No GPS fix";
-      document.getElementById("no-gps").style.display = "block";
-      document.getElementById("gps-status").textContent = "No satellite fix";
-      return;
-    }
+  document.getElementById("dot").className = "lost";
+  document.getElementById("status-text").textContent = "Switching to Mobile GPS...";
+  document.getElementById("no-gps").style.display = "block";
+  document.getElementById("gps-status").textContent = "Fallback mode (Phone GPS)";
+
+  // 🔥 FALLBACK: Use browser GPS
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      // Update map
+      if (window.updateMapLocation) {
+        window.updateMapLocation(lat, lng);
+      }
+
+      // Push to Firebase
+      await db.ref("bus/location").set({
+        lat,
+        lng,
+        satellites: "phone",
+        timestamp: Math.floor(Date.now() / 1000),
+        source: "mobile"
+      });
+
+      document.getElementById("status-text").textContent = "Live (Mobile GPS)";
+      document.getElementById("gps-status").textContent = "Using phone GPS ✅";
+    }, (err) => {
+      console.error("Mobile GPS error:", err);
+    });
+  }
+
+  return;
+}
 
     document.getElementById("no-gps").style.display = "none";
     const pos = { lat: data.lat, lng: data.lng };
@@ -90,8 +118,8 @@ function listenToFirebase() {
     document.getElementById("satellites").textContent = data.satellites || "—";
     document.getElementById("lat-val").textContent = data.lat.toFixed(6);
     document.getElementById("lng-val").textContent = data.lng.toFixed(6);
-    document.getElementById("gps-status").textContent = "GPS locked ✅";
-
+    const source = data.source === "mobile" ? "Phone GPS 📱" : "Hardware GPS 🛰️";
+    document.getElementById("gps-status").textContent = `Live via ${source}`;
   }, (error) => {
     document.getElementById("dot").className = "lost";
     document.getElementById("status-text").textContent = "Connection error";
