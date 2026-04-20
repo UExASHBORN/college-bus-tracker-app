@@ -70,27 +70,29 @@ function listenToFirebase() {
   db.ref("bus/location").on("value", (snapshot) => {
     const data = snapshot.val();
 
-    if (!data || !data.lat || !data.lng) {
+  if (!data || !data.lat || !data.lng) {
   document.getElementById("dot").className = "lost";
   document.getElementById("status-text").textContent = "Switching to Mobile GPS...";
   document.getElementById("no-gps").style.display = "block";
   document.getElementById("gps-status").textContent = "Fallback mode (Phone GPS)";
 
-  // 🔥 FALLBACK: Use browser GPS
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async (pos) => {
+
+    navigator.geolocation.watchPosition(async (pos) => {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      // Update map
+      console.log("📱 Mobile GPS:", lat, lng);
+
+      // 🔥 UPDATE MAP
       if (window.updateMapLocation) {
         window.updateMapLocation(lat, lng);
       }
 
-      // Push to Firebase
+      // 🔥 PUSH TO FIREBASE (THIS WAS MISSING PROPERLY)
       await db.ref("bus/location").set({
-        lat,
-        lng,
+        lat: lat,
+        lng: lng,
         satellites: "phone",
         timestamp: Math.floor(Date.now() / 1000),
         source: "mobile"
@@ -98,9 +100,17 @@ function listenToFirebase() {
 
       document.getElementById("status-text").textContent = "Live (Mobile GPS)";
       document.getElementById("gps-status").textContent = "Using phone GPS ✅";
+
     }, (err) => {
-      console.error("Mobile GPS error:", err);
+      console.error("GPS error:", err);
+    }, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000
     });
+
+  } else {
+    console.error("Geolocation not supported");
   }
 
   return;
