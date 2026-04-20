@@ -12,6 +12,7 @@ auth.onAuthStateChanged(user => {
   }
 
   // If user is logged in and on login page, redirect to index
+  initMap();
   if (isLoginPage) {
     window.location.replace("index.html");
     return;

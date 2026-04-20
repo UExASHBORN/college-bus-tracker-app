@@ -205,27 +205,9 @@
 <script src="../src/map.js?v=1.1"></script>
 <script src="../src/app.js?v=1.1"></script>
 
-<!-- Google Maps -->
 
-<script>
-  const GOOGLE_MAPS_API_KEY = "REPLACE_WITH_YOUR_REAL_KEY";
-</script>
-
-<script>
-  function loadGoogleMaps() {
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyA2UuEzp_1BiKlDfuyFN1tGeDy6BpNVki4&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-  }
-
-  window.addEventListener("load", loadGoogleMaps);
-</script>
-<!-- <script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2UuEzp_1BiKlDfuyFN1tGeDy6BpNVki4&callback=initMap"
-  async defer>
-</script> -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 </body>
 </html>
