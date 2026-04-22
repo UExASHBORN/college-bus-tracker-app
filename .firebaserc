@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "college-bus-tracker-app-d318a"
+  },
+  "targets": {
+    "college-bus-tracker-app-d318a": {
+      "hosting": {
+        "main": [
+          "college-bus-tracker-app-d318a"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

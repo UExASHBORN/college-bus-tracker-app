@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>IUL Bus Tracking</title>
+  <meta name="description" content="Live college bus GPS tracking system powered by ESP32 and Firebase."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+
+<!-- Auth loading screen -->
+<div id="auth-loading">
+  <div class="spinner-lg"></div>
+  <p>Checking authentication…</p>
+</div>
+
+<header>
+  <img src="../assets/iul_bus_icon.png" alt="IUL Bus Logo" style="width: 38px; height: 38px; border-radius: 8px; object-fit: contain; flex-shrink: 0;">
+  <div class="header-title">
+    <h1>IUL BUS TRACKING</h1>
+    <p>Live GPS Tracking System</p>
+  </div>
+  <span id="admin-badge">Admin</span>
+  <span id="driver-badge" style="display:none;">Driver</span>
+  <div id="user-info">
+    <span id="user-email"></span>
+    <button id="logout-btn">Sign Out</button>
+  </div>
+</header>
+
+<div id="status-bar">
+  <div class="stat"><div id="dot"></div> <span id="status-text">Connecting…</span></div>
+  <div class="stat">Last update: <span id="last-update">—</span></div>
+  <div class="stat">Satellites: <span id="satellites">—</span></div>
+</div>
+
+<div id="map-container">
+  <div id="map"></div>
+  <div id="no-gps">
+    <h3>Waiting for GPS fix</h3>
+    <p>ESP32 is connected but GPS has no satellite lock yet.<br>Make sure the NEO-6M has a clear view of the sky.</p>
+  </div>
+</div>
+
+<div id="info-card">
+  <div class="info-item">
+    <div class="info-label">Latitude</div>
+    <div class="info-value" id="lat-val">—</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Longitude</div>
+    <div class="info-value" id="lng-val">—</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Status</div>
+    <div class="info-value" id="gps-status">Waiting…</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Updates every</div>
+    <div class="info-value">5 seconds</div>
+  </div>
+</div>
+
+<!-- Admin floating panel -->
+<div id="admin-panel">
+  <div class="panel-header" id="panel-header">
+    <div class="panel-title">⚙️ Admin Panel</div>
+    <span id="panel-toggle">▲</span>
+  </div>
+  <div class="panel-body" id="panel-body">
+
+
+
+    <!-- Manual location override -->
+    <div>
+      <div class="panel-section-label">Manual Location Override</div>
+      <div class="coord-row">
+        <div class="coord-input-wrap">
+          <label for="admin-lat">Latitude</label>
+          <input type="number" id="admin-lat" placeholder="26.8467" step="0.000001"/>
+        </div>
+        <div class="coord-input-wrap">
+          <label for="admin-lng">Longitude</label>
+          <input type="number" id="admin-lng" placeholder="80.9462" step="0.000001"/>
+        </div>
+      </div>
+      <br/>
+      <button class="panel-btn btn-push" id="push-loc-btn">📍 Push Location to Map</button>
+      <br/><br/>
+      <button class="panel-btn btn-clear" id="clear-loc-btn">🗑 Clear Location Data</button>
+      <div id="panel-feedback"></div>
+    </div>
+
+    <!-- Attendance Monitoring for Admin -->
+    <div style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 16px;">
+      <div class="panel-section-label">Attendance Monitoring</div>
+      <div id="admin-attendance-view" style="font-size: 12px; color: #94a3b8; max-height: 150px; overflow-y: auto;">
+        <p>Loading attendance logs...</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Driver Panel -->
+<div id="driver-panel" style="display:none;">
+  <div class="panel-header" id="driver-panel-header">
+    <div class="panel-title">🚌 Driver Panel</div>
+    <span id="driver-panel-toggle">▲</span>
+  </div>
+  <div class="panel-body" id="driver-panel-body">
+    <div>
+      <div class="panel-section-label">Mark Attendance</div>
+      <div style="margin-bottom: 10px;">
+        <label for="stop-select" style="font-size: 11px; color: #94a3b8;">Select Stop:</label>
+        <select id="stop-select" class="driver-select"></select>
+      </div>
+      <button class="panel-btn btn-push" id="reach-stop-btn" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; margin-bottom: 15px;">📍 I have reached this stop</button>
+      
+      <div>
+        <label for="student-select" style="font-size: 11px; color: #94a3b8;">Select Student:</label>
+        <select id="student-select" class="driver-select"></select>
+      </div>
+      <div style="margin-top: 10px;">
+        <label for="status-select" style="font-size: 11px; color: #94a3b8;">Status:</label>
+        <select id="status-select" class="driver-select">
+          <option value="Present">✅ Present / Picked Up</option>
+          <option value="Absent">❌ Absent</option>
+        </select>
+      </div>
+      <br/>
+      <button class="panel-btn btn-push" id="mark-attendance-btn">📤 Update Attendance</button>
+      <div id="driver-feedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Emergency SOS Button & Modal -->
+<button id="sos-btn" class="sos-floating-btn">🚨 SOS</button>
+
+<!-- Route Schedule Button -->
+<button id="route-btn" class="route-floating-btn">🗺️ Route</button>
+
+<!-- Route Sidebar -->
+<div id="route-sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h2>Bus Route & Schedule</h2>
+    <button id="close-route" class="close-btn">&times;</button>
+  </div>
+  <div class="sidebar-body">
+    <ul id="route-list" class="route-list"></ul>
+  </div>
+</div>
+
+<div id="emergency-modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🚨 Emergency Contacts</h2>
+      <button id="close-sos" class="close-btn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>If you are facing any problem or feel unsafe on the bus, contact immediately:</p>
+      <div class="contact-list">
+        <a href="tel:112" class="contact-card urgency-high">
+          <span class="contact-icon">🚓</span>
+          <div class="contact-info">
+            <span class="contact-name">Police / National Emergency</span>
+            <span class="contact-num">112</span>
+          </div>
+        </a>
+        <a href="tel:1091" class="contact-card urgency-high">
+          <span class="contact-icon">🛡️</span>
+          <div class="contact-info">
+            <span class="contact-name">Women Helpline</span>
+            <span class="contact-num">1091</span>
+          </div>
+        </a>
+        <a href="tel:+91XXXXXXXXXX" class="contact-card urgency-medium">
+          <span class="contact-icon">🏢</span>
+          <div class="contact-info">
+            <span class="contact-name">College Administration</span>
+            <span class="contact-num">Tap to Call</span>
+          </div>
+        </a>
+        <a href="tel:+91XXXXXXXXXX" class="contact-card urgency-medium">
+          <span class="contact-icon">🚌</span>
+          <div class="contact-info">
+            <span class="contact-name">Transport Incharge</span>
+            <span class="contact-num">Tap to Call</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="../src/firebase.js?v=2.0"></script>
+<script src="../src/map.js?v=2.0"></script>
+<script src="../src/app.js?v=2.0"></script>
+
+<script>
+  // Initialize map after all scripts are loaded
+  window.addEventListener("load", function() {
+    if (typeof initMap === "function") initMap();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Sign In — IUL Bus Tracking</title>
+  <meta name="description" content="Sign in to access the College Bus live tracking system."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/main.css">
+  <style>
+    /* Prevent iOS auto-zoom on input focus (font-size must be >= 16px) */
+    @media (max-width: 768px) {
+      .form-group input, #reset-email { font-size: 16px !important; }
+      .login-card { padding: 36px 24px; border-radius: 0; min-height: 100dvh; justify-content: center; display: flex; flex-direction: column; max-width: 100%; }
+      .blob-1 { width: 300px; height: 300px; }
+      .blob-2 { width: 240px; height: 240px; }
+      .blob-3 { display: none; }
+    }
+  </style>
+</head>
+<body class="login-body">
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="login-card">
+  <div class="card-header">
+    <div class="bus-icon">🚌</div>
+    <h1>IUL BUS TRACKING</h1>
+    <p>Login to your account</p>
+  </div>
+
+  <!-- Login Type Toggle -->
+  <div class="login-toggle">
+    <button id="type-user" class="active">Student/Admin</button>
+    <button id="type-driver">Driver</button>
+  </div>
+
+  <form id="login-form" autocomplete="on" novalidate>
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <div class="input-wrapper">
+        <span class="input-icon">✉️</span>
+        <input type="email" id="email" placeholder="your@email.com" required autocomplete="email"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-wrapper">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password"/>
+      </div>
+    </div>
+
+    <a id="forgot-link" tabindex="0">Forgot password?</a>
+
+    <button type="submit" id="login-btn">Sign In</button>
+    <div id="error-msg"></div>
+
+    <!-- Reset password inline section -->
+    <div id="reset-section">
+      <p>Enter your email and we'll send you a password reset link.</p>
+      <input type="email" id="reset-email" placeholder="your@email.com" autocomplete="email"/>
+      <button type="button" id="reset-btn">📧 Send Reset Link</button>
+      <div id="reset-feedback"></div>
+    </div>
+  </form>
+
+  <div class="card-footer">
+    <strong>Invite only.</strong> Don't have access?<br>
+    Contact admin at <a href="mailto:mohammadzaid7889@gmail.com">mohammadzaid7889@gmail.com</a>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script src="../src/firebase.js"></script>
+<script src="../src/app.js"></script>
+
+</body>
+</html>
